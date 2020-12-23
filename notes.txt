@@ -1,0 +1,51 @@
+/etc/nginx/sites-enabled/mh_sites    
+        location /wtgw/ {
+                include proxy_params;
+                proxy_pass http://unix:/var/www/mh-wtgw/mh-wtgw.sock:/;
+        }
+    
+    
+/etc/systemd/system/wtgw.service
+[Unit]
+Description=Gunicorn instance for MH Whatz The Good Word
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/var/www/mh-wtgw
+ExecStart=/usr/local/bin/gunicorn --workers 3 --bind unix:mh-wtgw.sock wsgi:app
+
+[Install]
+WantedBy=multi-user.target
+
+
+wsgi.py
+from app import app
+if __name__ == "__main__":
+    app.run()
+
+
+On server, form submission URS are to be changed
+index.html
+    action="/wtgw/clue"
+    
+game.html
+    action="/wtgw/getClue"
+    url: '/wtgw/check'
+    url: '/wtgw/show'
+    
+    
+style="border:1px solid #cecece;"
+
+<div class="form-row align-items-center">
+                        <div>
+                                            </div>
+                </div>
+                
+                
+                
+        <form align="center" class="inputstl" method="post" action="/getClue">
+        </form>        
+        
+        
+        

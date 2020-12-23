@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MH Whatz The Good Word</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .inputstl { 
+            padding: 9px; 
+            border: solid 1px #4B718B; 
+            outline: 0; 
+            background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CDDBE4), to(#FFFFFF)); 
+            background: -moz-linear-gradient(top, #FFFFFF, #CDDBE4 1px, #FFFFFF 25px); 
+            box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+            -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+            -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+        }
+
+        .text-responsive {
+            font-size: calc(100% + 1vw + 1vh);
+        }
+    </style>
+    <!-- Add Bootstrap Links -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-color: rgb(255, 215, 0);">
+    <div align="center" class="container inputstl">
+        <h4 class="text-responsive"><u>MH Whatz The Good Word</u></h4>
+        <div class="row">
+            <div class="md-4 sm-4 xs-4">
+                <input type="hidden" id="index" value="{{index}}"/>
+                <p class="text-responsive">Clue:</p>
+                <div id="clue" class="text-responsive">{{ clue }}<br/></div>
+                <input type="text" id="answer" class="text-responsive" placeholder="Enter your answer"/>
+                <p id="message" class="text-responsive"></p>
+                <button id="check" style="font-size:18px;" class="btn btn-primary">Check</button>
+                <button id="show" style="font-size:18px;" class="btn btn-primary">Show Answer</button>
+                <button id="new" style="font-size:18px;" class="btn btn-primary">New Word Clue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#check").click(function(e) {
+                $.ajax({
+                    data: {
+                        'index': $("#index").val(),
+                        'answer': $("#answer").val()
+                    },
+                    type: 'GET',
+                    url: '/check',
+                    success: function(response) {
+                        $('#message').show().text(response);
+                        if (response == "You got it right!") {
+                            $("#check").hide();
+                            $("#show").hide();
+                        }
+                    }
+                });
+            });
+
+            $("#show").click(function(e) {
+                $.ajax({
+                    data: {
+                        'index': $("#index").val()
+                    },
+                    type: 'GET',
+                    url: '/show',
+                    success: function(response) {
+                        $("#answer").hide();
+                        $('#message').show().text(response);
+                        $("#check").hide();
+                        $("#show").hide();
+                    }
+                });
+            });
+
+            $("#new").click(function(e) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/new',
+                    success: function(response) {
+                        $('#clue').text(response.clue);
+                        $('#index').val(response.index);
+                        $('#answer').show().val("");
+                        $('#message').text("");
+                        $('#check').show();
+                        $('#show').show();
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+
+</html>
