@@ -9,17 +9,17 @@ with open('data.txt', 'r') as data_file:
 
 @app.route("/", methods=['GET'])
 def index():     
-    return render_template('index.html')
-
-
-@app.route("/getClue", methods=['POST'])
-def getClue():
     index = random.randint(1, len(data_list) - 1)
     clue  = data_list[index].split('|')[0]
 
     return render_template('game.html',
                             clue=clue.strip(),
                             index=index)
+
+@app.route('/serviceworker.js')
+def sw():
+    # return app.send_static_file('service-worker.js'), 200, {'Content-Type': 'text/javascript'}
+    return app.send_static_file('serviceworker.js')
 
 @app.route("/check")
 def checkAnswer():

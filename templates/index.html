@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 </head>
 
 <body style="background-color: rgb(255, 215, 0);">
@@ -34,6 +35,23 @@
             <button type="submit" style="font-size:20px;" class="btn btn-primary">Play</button>
         </form>
     </div>
+
+
+    <script> 
+        window.addEventListener('load', async e => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker
+                .register('./serviceworker.js')
+                .then(function(registration) {
+                    console.log('Service Worker Registered!');
+                    return registration;
+                })
+                .catch(function(err) {
+                    console.error('Unable to register service worker.', err);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

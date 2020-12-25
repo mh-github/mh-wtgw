@@ -5,6 +5,7 @@
     <title>MH Whatz The Good Word</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2196f3"/>
     <style>
         .inputstl { 
             padding: 9px; 
@@ -25,6 +26,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="manifest" href="/wtgw/static/manifest.json">
+    <link rel="apple-touch-icon" href="/wtgw/static/images/mh-wtgw-192.png">
 </head>
 
 <body style="background-color: rgb(255, 215, 0);">
@@ -45,54 +48,70 @@
     </div>
 
     <script>
-        $(document).ready(function(){
-            $("#check").click(function(e) {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker
+                .register('/wtgw/serviceworker.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                     }, function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    }
+                );
+            });
+        }
+
+        $(document).ready(function() {
+            $("#check").click(function() {
                 $.ajax({
                     data: {
                         'index': $("#index").val(),
                         'answer': $("#answer").val()
                     },
                     type: 'GET',
-                    url: '/check',
-                    success: function(response) {
-                        $('#message').show().text(response);
-                        if (response == "You got it right!") {
-                            $("#check").hide();
-                            $("#show").hide();
-                        }
-                    }
-                });
-            });
-
-            $("#show").click(function(e) {
-                $.ajax({
-                    data: {
-                        'index': $("#index").val()
-                    },
-                    type: 'GET',
-                    url: '/show',
-                    success: function(response) {
-                        $("#answer").hide();
-                        $('#message').show().text(response);
+                    url: '/check'
+                })
+                .done(function(response) {
+                    $('#message').show().text(response);
+                    if (response == "You got it right!") {
                         $("#check").hide();
                         $("#show").hide();
                     }
                 });
             });
 
-            $("#new").click(function(e) {
+            $("#show").click(function() {
+                $.ajax({
+                    data: {
+                        'index': $("#index").val()
+                    },
+                    type: 'GET',
+                    url: '/show'
+                })
+                .done(function(response) {
+                    $("#answer").hide();
+                    $('#message').show().text(response);
+                    $("#check").hide();
+                    $("#show").hide();
+                });
+            });
+
+            $("#new").click(function() {
                 $.ajax({
                     type: 'GET',
-                    url: '/new',
-                    success: function(response) {
-                        $('#clue').text(response.clue);
-                        $('#index').val(response.index);
-                        $('#answer').show().val("");
-                        $('#message').text("");
-                        $('#check').show();
-                        $('#show').show();
-                    }
+                    url: '/new'
                 })
+                .done(function(response) {
+                    $('#clue').text(response.clue);
+                    $('#index').val(response.index);
+                    $('#answer').show().val("");
+                    $('#message').text("");
+                    $('#check').show();
+                    $('#show').show();
+                })
+                .fail(function(response) {
+                    alert("Could not connect to server\nPlease check if you are online");
+                });
             });
         });
     </script>
