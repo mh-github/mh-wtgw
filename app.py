@@ -16,11 +16,6 @@ def index():
                             clue=clue.strip(),
                             index=index)
 
-@app.route('/serviceworker.js')
-def sw():
-    # return app.send_static_file('service-worker.js'), 200, {'Content-Type': 'text/javascript'}
-    return app.send_static_file('serviceworker.js')
-
 @app.route("/check")
 def checkAnswer():
     ind = int(request.args.get("index"))

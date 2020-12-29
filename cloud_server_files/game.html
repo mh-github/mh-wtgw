@@ -26,8 +26,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="manifest" href="/static/manifest.json">
-    <link rel="apple-touch-icon" href="/static/images/mh-wtgw-192.png">
+    <link rel="manifest" href="/wtgw/static/manifest.json">
+    <link rel="apple-touch-icon" href="/wtgw/static/images/mh-wtgw-192.png">
 </head>
 
 <body style="background-color: rgb(255, 215, 0);">
@@ -51,7 +51,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker
-                .register('/static/serviceworker.js', {scope: '/'})
+                .register('/wtgw/static/serviceworker.js', {scope: '/wtgw/'})
                 .then(function(registration) {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                  }, function(err) {
@@ -68,7 +68,7 @@
                         'answer': $("#answer").val()
                     },
                     type: 'GET',
-                    url: '/check'
+                    url: '/wtgw/check'
                 })
                 .done(function(response) {
                     $('#message').show().text(response);
@@ -85,7 +85,7 @@
                         'index': $("#index").val()
                     },
                     type: 'GET',
-                    url: '/show'
+                    url: '/wtgw/show'
                 })
                 .done(function(response) {
                     $("#answer").hide();
@@ -98,7 +98,7 @@
             $("#new").click(function() {
                 $.ajax({
                     type: 'GET',
-                    url: '/new'
+                    url: '/wtgw/new'
                 })
                 .done(function(response) {
                     $('#clue').text(response.clue);

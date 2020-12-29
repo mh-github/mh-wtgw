@@ -1,6 +1,6 @@
 var CACHE_NAME = 'mh-wtgw-cache-v1';
 const urlsToCache = [
-    "/"
+    "/wtgw/"
 ];
 
 self.addEventListener('install', function(event) {
